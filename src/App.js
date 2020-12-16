@@ -1,24 +1,33 @@
-import logo from './logo.svg';
+import {
+  XYPlot,
+  XAxis,
+  YAxis,
+  HorizontalGridLines,
+  VerticalGridLines,
+  LineMarkSeries
+} from 'react-vis';
+
 import './App.css';
 
-function App() {
+function App({ model }) {
+  if (!model) {
+    return <div>Now Loading...</div>;
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <XYPlot xType="time" width={800} height={600}>
+      <HorizontalGridLines />
+      <VerticalGridLines />
+      <XAxis title="Update" />
+      <YAxis title="Stops Passed" />
+      {
+        Object.keys(model).map(key => (
+          <LineMarkSeries
+            key={key}
+            data={model[key].map(loc => ({ x: loc.last_updated.getTime(), y: loc.stops_passed }))}
+          />
+        ))
+      }
+    </XYPlot>
   );
 }
 
