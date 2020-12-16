@@ -6,10 +6,10 @@ import groupBy from 'lodash.groupby';
 import './index.css';
 import App from './App';
 
-function render(model) {
+function render(model, now) {
   ReactDOM.render(
     <React.StrictMode>
-      <App model={model} />
+      <App model={model} now={now} />
     </React.StrictMode>,
     document.getElementById('root')
   );
@@ -51,7 +51,7 @@ async function init() {
 
     const model = groupBy(rows, 'vehicle_id');
 
-    render(model);
+    render(model, new Date());
   }
 
   fetchAndQuery();
