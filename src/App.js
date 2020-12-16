@@ -25,8 +25,8 @@ function App({ model, now }) {
   const approaching = keys.find(key => lastItem(model[key]).stops_passed === 23);
   const approachingSince = approaching ? model[approaching].find(item => item.stops_passed === 23).last_updated : undefined;
   return (
-    <div>
-      <div className="container">
+    <div className="container">
+      <div className="charts">
         <XYPlot xType="time" width={800} height={600}>
           <HorizontalGridLines />
           <VerticalGridLines />
@@ -41,7 +41,7 @@ function App({ model, now }) {
             ))
           }
         </XYPlot>
-        <DiscreteColorLegend width={200} height={600} items={keys.map(key =>
+        <DiscreteColorLegend width={150} height={600} items={keys.map(key =>
           `${key}(${lastItem(model[key]).stops_passed})`
         )} />
       </div>
