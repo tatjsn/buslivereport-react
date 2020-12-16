@@ -18,15 +18,17 @@ function App({ model }) {
   if (!model) {
     return <div>Now Loading...</div>;
   }
+  const keys = Object.keys(model)
+    .sort((a, b) => lastItem(model[b]).stops_passed - lastItem(model[a]).stops_passed);
   return (
-    <>
+    <div className="container">
       <XYPlot xType="time" width={800} height={600}>
         <HorizontalGridLines />
         <VerticalGridLines />
         <XAxis title="Update" />
         <YAxis title="Stops Passed" />
         {
-          Object.keys(model).map(key => (
+          keys.map(key => (
             <LineMarkSeries
               key={key}
               data={model[key].map(loc => ({ x: loc.last_updated.getTime(), y: loc.stops_passed }))}
@@ -34,10 +36,10 @@ function App({ model }) {
           ))
         }
       </XYPlot>
-      <DiscreteColorLegend height={200} width={300} items={Object.keys(model).map(key =>
+      <DiscreteColorLegend width={300} height={600} items={keys.map(key =>
         `${key}(${lastItem(model[key]).stops_passed})`
       )} />
-    </>
+    </div>
   );
 }
 
