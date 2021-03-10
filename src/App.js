@@ -20,6 +20,9 @@ function App({ model, now }) {
   if (!model) {
     return <div>Now Loading...</div>;
   }
+  if (model.error) {
+    return <div>Oops! {model.error} See <a href="https://citymapper.com/london/bus/bus-326">here</a> for updated information.</div>;
+  }
   const keys = Object.keys(model)
     .sort((a, b) => lastItem(model[b]).stops_passed - lastItem(model[a]).stops_passed);
   const approaching = keys.find(key => lastItem(model[key]).stops_passed === 23);
