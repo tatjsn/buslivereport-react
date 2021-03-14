@@ -7,6 +7,10 @@ workflows:
   main:
     jobs:
       - node/test
+          filters:
+            branches:
+              ignore:
+                - master
       - deploy:
           filters:
             branches:
@@ -20,6 +24,8 @@ jobs:
     executor:
       name: node/default
     steps:
+      - checkout
+      - node/install-packages
       - run:
           name: Build the app
           command: npm run build
