@@ -20,7 +20,6 @@ jobs:
     executor:
       name: node/default
     steps:
-      - checkout
       - run:
           name: Build the app
           command: npm run build
