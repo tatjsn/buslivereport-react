@@ -25,9 +25,6 @@ jobs:
       - checkout
       - node/install-packages
       - run:
-          name: Build the app
-          command: npm run build
-      - run:
           name: Prepare Vercel project.json
           command: mkdir .vercel && echo $VERCEL_PROJECT_JSON > .vercel/project.json
       - run:
