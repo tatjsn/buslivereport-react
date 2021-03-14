@@ -10,14 +10,12 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
+                - main
       - deploy:
           filters:
             branches:
-              ignore:
-                - master
-          requires:
-            - node/test
+              only:
+                - main
 
 jobs:
   deploy:
