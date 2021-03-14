@@ -12,6 +12,8 @@ workflows:
             branches:
               ignore:
                 - master
+          requires:
+            - node/test
 
 jobs:
   deploy:
