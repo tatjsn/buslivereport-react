@@ -15,5 +15,9 @@ workflows:
 
 jobs:
   deploy:
+    executor:
+      name: maven/default
     steps:
-      - npx vercel --prod --token $VERCEL_TOKEN
+      - run:
+          name: Deploy Vercel production
+          command: npx vercel --prod --token $VERCEL_TOKEN
