@@ -19,5 +19,8 @@ jobs:
       name: node/default
     steps:
       - run:
+          name: Prepare Vercel project.json
+          command: mkdir .vercel && echo $VERCEL_PROJECT_JSON > .vercel/project.json
+      - run:
           name: Deploy Vercel production
           command: npx vercel --prod --token $VERCEL_TOKEN
