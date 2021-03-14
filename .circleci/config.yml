@@ -6,7 +6,7 @@ orbs:
 workflows:
   main:
     jobs:
-      - node/test
+      - node/test:
           filters:
             branches:
               ignore:
