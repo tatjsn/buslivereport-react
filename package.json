@@ -12,7 +12,8 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
-    "react-vis": "^1.11.7"
+    "react-vis": "^1.11.7",
+    "vercel": "^21.3.3"
   },
   "scripts": {
     "start": "react-scripts start",

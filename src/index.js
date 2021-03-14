@@ -24,6 +24,7 @@ async function init() {
       case 0:
         const os = db.createObjectStore('location', { keyPath: 'id', autoIncrement: true });
         os.createIndex('last_updated', 'last_updated', { unique: false });
+        // no default
       }
     }
   });

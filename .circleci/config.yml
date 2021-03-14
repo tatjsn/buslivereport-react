@@ -1,7 +1,19 @@
 version: 2.1
+
 orbs:
   node: circleci/node@3.0.0
+
 workflows:
-  node-tests:
+  main:
     jobs:
       - node/test
+      - deploy:
+          filters:
+            branches:
+              ignore:
+                - master
+
+jobs:
+  deploy:
+    steps:
+      - npx vercel --prod --token $VERCEL_TOKEN
