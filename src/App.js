@@ -60,6 +60,7 @@ function App({ model, now }) {
           <p>No bus is approaching</p>
         )
       }
+      <p>(DEBUG) Keys: {keys.length}</p>
     </div>
   );
 }
