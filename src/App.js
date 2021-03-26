@@ -25,13 +25,7 @@ function App({ model, now }) {
     return <p>Oops! {model.error} See <a href="https://citymapper.com/london/bus/bus-326">here</a> for updated information.</p>;
   }
 
-  const rawKeys = Object.keys(model);
-
-  if (rawKeys.length === 0) {
-    return <p>No valid key. Reload and try again.</p>;
-  }
-
-  const keys = rawKeys.sort((a, b) => lastItem(model[b]).stops_passed - lastItem(model[a]).stops_passed);
+  const keys = Object.keys(model).sort((a, b) => lastItem(model[b]).stops_passed - lastItem(model[a]).stops_passed);
 
   const approaching = keys.find(key => lastItem(model[key]).stops_passed === 23);
   const approachingSince = approaching ? model[approaching].find(item => item.stops_passed === 23).last_updated : undefined;

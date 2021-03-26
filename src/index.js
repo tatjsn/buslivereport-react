@@ -30,21 +30,21 @@ async function init() {
   });
 
   async function fetchAndQuery() {
-    const now = new Date();
     const result = await fetch('/api/1/vehiclelocations?route=LondonBus326&region_id=uk-london');
     const data = await result.json();
     if (data.vehicle_locations.length === 0) {
-      render({ error: 'No bus in route.' }, now);
+      render({ error: 'No bus in route.' });
       return;
     }
     const group = data.vehicle_locations.find(d => d.pattern_id === '61326_Y0546088_1');
     for (const vehicle of group.vehicles) {
       const { vehicle_id, stops_passed, last_updated } = vehicle;
-      db.put('location', { vehicle_id, stops_passed, last_updated: new Date(last_updated) });
+      await db.add('location', { vehicle_id, stops_passed, last_updated: new Date(last_updated) });
     }
     const tx = db.transaction('location', 'readonly');
     const index = tx.store.index('last_updated');
     
+    const now = new Date();
     const range = IDBKeyRange.bound(subMinutes(now, 15), now);
     let cursor = await index.openCursor(range);
 
