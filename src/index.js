@@ -36,7 +36,7 @@ async function init() {
       render({ error: 'No bus in route.' });
       return;
     }
-    const group = data.vehicle_locations.find(d => d.pattern_id === '61326_Y0546088_1');
+    const group = data.vehicle_locations.find(d => d.pattern_id === '61326_Y0559973_1');
     for (const vehicle of group.vehicles) {
       const { vehicle_id, stops_passed, last_updated } = vehicle;
       await db.add('location', { vehicle_id, stops_passed, last_updated: new Date(last_updated) });
