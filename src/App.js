@@ -8,7 +8,6 @@ import {
   DiscreteColorLegend
 } from 'react-vis';
 import format from 'date-fns/format';
-import formatDistance from 'date-fns/formatDistance';
 
 import './App.css';
 
