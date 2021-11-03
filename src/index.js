@@ -5,11 +5,12 @@ import subMinutes from 'date-fns/subMinutes';
 import groupBy from 'lodash.groupby';
 import './index.css';
 import App from './App';
+import routeInfo from './routeInfoMod.json';
 
-function render(model, now) {
+function render(model, now, routeInfo) {
   ReactDOM.render(
     <React.StrictMode>
-      <App model={model} now={now} />
+      <App model={model} now={now} routeInfo={routeInfo} />
     </React.StrictMode>,
     document.getElementById('root')
   );
@@ -36,7 +37,7 @@ async function init() {
       render({ error: 'No bus in route.' });
       return;
     }
-    const group = data.vehicle_locations.find(d => d.pattern_id === '61326_Y0559973_1');
+    const group = data.vehicle_locations.find(d => d.pattern_id === routeInfo.id);
     for (const vehicle of group.vehicles) {
       const { vehicle_id, stops_passed, last_updated } = vehicle;
       await db.add('location', { vehicle_id, stops_passed, last_updated: new Date(last_updated) });
@@ -56,7 +57,7 @@ async function init() {
 
     const model = groupBy(rows, 'vehicle_id');
 
-    render(model, now);
+    render(model, now, routeInfo);
   }
 
   fetchAndQuery();

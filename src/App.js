@@ -16,7 +16,14 @@ function lastItem(arr) {
   return arr[arr.length - 1];
 }
 
-function App({ model, now }) {
+function formatLegend(model, routeInfo, key) {
+  const stopsPassed = lastItem(model[key]).stops_passed;
+  const stopName = routeInfo.stop_points[stopsPassed].name;
+
+  return `${key}(${stopsPassed}:${stopName})`;
+}
+
+function App({ model, now, routeInfo }) {
   if (!model) {
     return <p>Now Loading...</p>;
   }
@@ -27,8 +34,6 @@ function App({ model, now }) {
 
   const keys = Object.keys(model).sort((a, b) => lastItem(model[b]).stops_passed - lastItem(model[a]).stops_passed);
 
-  const approaching = keys.find(key => lastItem(model[key]).stops_passed === 23);
-  const approachingSince = approaching ? model[approaching].find(item => item.stops_passed === 23).last_updated : undefined;
   return (
     <div className="container">
       <div className="charts">
@@ -46,22 +51,17 @@ function App({ model, now }) {
             ))
           }
         </XYPlot>
-        <DiscreteColorLegend width={150} height={600} items={keys.map(key =>
-          `${key}(${lastItem(model[key]).stops_passed})`
-        )} />
+        <DiscreteColorLegend width={150} height={600} items={keys.map(key => formatLegend(model, routeInfo, key))} />
       </div>
       <p>
         Last updated: {format(now, 'HH:mm:ss')}
       </p>
-      {
-        approachingSince ? (
-          <p>
-            Bus passed Totteridge & Whetstone Station since {format(approachingSince, 'HH:mm:ss')} ({formatDistance(approachingSince, now, { addSuffix: true })})
-          </p>
-        ) : (
-          <p>No bus is approaching</p>
-        )
-      }
+      <p>
+        Route name: {routeInfo.name}
+      </p>
+      <p>
+        Note: Totteridge = 26, H&R Sussex Ring = 35
+      </p>
     </div>
   );
 }
