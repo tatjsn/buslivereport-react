@@ -17,7 +17,8 @@ function lastItem(arr) {
 
 function formatLegend(model, routeInfo, key) {
   const stopsPassed = lastItem(model[key]).stops_passed;
-  const stopName = routeInfo.stop_points[stopsPassed].name;
+  const stopData = routeInfo.stop_points[stopsPassed];
+  const stopName = stopData ? stopData.name : 'Unknown';
 
   return `${key}(${stopsPassed}:${stopName})`;
 }
