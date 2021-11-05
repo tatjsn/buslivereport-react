@@ -34,10 +34,14 @@ async function init() {
     const result = await fetch('/api/1/vehiclelocations?route=LondonBus326&region_id=uk-london');
     const data = await result.json();
     if (data.vehicle_locations.length === 0) {
-      render({ error: 'No bus in route.' });
+      render({ error: 'No bus in route (1).' });
       return;
     }
     const group = data.vehicle_locations.find(d => d.pattern_id === routeInfo.id);
+    if (!group) {
+      render({ error: 'No bus in route (2).' });
+      return;
+    }
     for (const vehicle of group.vehicles) {
       const { vehicle_id, stops_passed, last_updated } = vehicle;
       await db.add('location', { vehicle_id, stops_passed, last_updated: new Date(last_updated) });
