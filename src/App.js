@@ -92,7 +92,7 @@ function App({ model, now, timeFrom, routeInfo }) {
         Route name: {routeInfo.name}
       </p>
       <p>
-        Note: Totteridge = 26, H&R Sussex Ring = 35
+        Note: 26 = Totteridge, 35 = H&R Sussex Ring
       </p>
     </div>
   );
