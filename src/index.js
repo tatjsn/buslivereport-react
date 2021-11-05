@@ -7,10 +7,10 @@ import './index.css';
 import App from './App';
 import routeInfo from './routeInfoMod.json';
 
-function render(model, now, routeInfo) {
+function render(model, now, timeFrom) {
   ReactDOM.render(
     <React.StrictMode>
-      <App model={model} now={now} routeInfo={routeInfo} />
+      <App model={model} now={now} timeFrom={timeFrom} routeInfo={routeInfo} />
     </React.StrictMode>,
     document.getElementById('root')
   );
@@ -46,7 +46,8 @@ async function init() {
     const index = tx.store.index('last_updated');
     
     const now = new Date();
-    const range = IDBKeyRange.bound(subMinutes(now, 15), now);
+    const timeFrom = subMinutes(now, 15);
+    const range = IDBKeyRange.bound(timeFrom, now);
     let cursor = await index.openCursor(range);
 
     const rows = [];
@@ -57,7 +58,7 @@ async function init() {
 
     const model = groupBy(rows, 'vehicle_id');
 
-    render(model, now, routeInfo);
+    render(model, now, timeFrom);
   }
 
   fetchAndQuery();

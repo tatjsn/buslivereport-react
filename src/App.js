@@ -1,12 +1,4 @@
-import {
-  XYPlot,
-  XAxis,
-  YAxis,
-  HorizontalGridLines,
-  VerticalGridLines,
-  LineMarkSeries,
-  DiscreteColorLegend
-} from 'react-vis';
+import { VictoryLine, VictoryScatter, VictoryChart,  VictoryTheme } from 'victory';
 import format from 'date-fns/format';
 
 import './App.css';
@@ -15,15 +7,34 @@ function lastItem(arr) {
   return arr[arr.length - 1];
 }
 
-function formatLegend(model, routeInfo, key) {
-  const stopsPassed = lastItem(model[key]).stops_passed;
+function formatData(model, key) {
+  return model[key].map(loc => ({
+    x: new Date(loc.last_updated.getTime()),
+    y: loc.stops_passed,
+  }));
+}
+
+function formatLabel(stopsPassed, routeInfo, isLastItem) {
+  if (!isLastItem) {
+    return `${stopsPassed}`;
+  }
   const stopData = routeInfo.stop_points[stopsPassed];
   const stopName = stopData ? stopData.name : 'Unknown';
 
-  return `${key}(${stopsPassed}:${stopName})`;
+  return `${stopsPassed}:${stopName}`;
 }
 
-function App({ model, now, routeInfo }) {
+function formatColor(index) {
+  const colors = VictoryTheme.material.legend.colorScale;
+  return colors[index % colors.length];
+}
+
+// Stroke color was derived from axis theme color.
+const dashLineStyle = { data: { stroke: '#90A4AE', strokeDasharray: '5 1' }};
+
+// The reason why we need to apply scale and minDomain to VictoryChart
+// https://github.com/FormidableLabs/victory/issues/1887
+function App({ model, now, timeFrom, routeInfo }) {
   if (!model) {
     return <p>Now Loading...</p>;
   }
@@ -37,21 +48,42 @@ function App({ model, now, routeInfo }) {
   return (
     <div className="container">
       <div className="charts">
-        <XYPlot xType="time" width={800} height={600}>
-          <HorizontalGridLines />
-          <VerticalGridLines />
-          <XAxis title="Update" />
-          <YAxis title="Stops Passed" />
+        <VictoryChart
+          scale={{ x: 'time' }}
+          minDomain={{ x: new Date(timeFrom) }}
+          theme={VictoryTheme.material}
+          width={800} height={600}
+        >
+          <VictoryLine
+            key={`line-totteridge`}
+            y={() => 26}
+            style={dashLineStyle}
+          />
+          <VictoryLine
+            key={`line-sussexring`}
+            y={() => 35}
+            style={dashLineStyle}
+          />
           {
-            keys.map(key => (
-              <LineMarkSeries
-                key={key}
-                data={model[key].map(loc => ({ x: loc.last_updated.getTime(), y: loc.stops_passed }))}
+            keys.map((key, i) => (
+              <VictoryLine
+                key={`line-${key}`}
+                data={formatData(model, key)}
+                style={{ data: { stroke: formatColor(i) }}}
               />
             ))
           }
-        </XYPlot>
-        <DiscreteColorLegend width={150} height={600} items={keys.map(key => formatLegend(model, routeInfo, key))} />
+          {
+            keys.map((key, i) => (
+              <VictoryScatter
+                key={`dot-${key}`}
+                data={formatData(model, key)}
+                labels={({ data, datum, index }) => formatLabel(datum.y, routeInfo, index === data.length - 1)}
+                style={{ data: { fill: formatColor(i) }}}
+              />
+            ))
+          }
+        </VictoryChart>
       </div>
       <p>
         Last updated: {format(now, 'HH:mm:ss')}
