@@ -14,7 +14,8 @@ function formatData(model, key) {
   }));
 }
 
-function formatLabel(stopsPassed, routeInfo, isLastItem) {
+function formatLabel(rawStopsPassed, routeInfo, isLastItem) {
+  const stopsPassed = Math.round(rawStopsPassed);
   if (!isLastItem) {
     return `${stopsPassed}`;
   }
